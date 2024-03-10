@@ -21,11 +21,16 @@ func New(val interface{}) *Reg {
 func (r *Reg) B() bool {
 	return r.res
 }
-func (r *Reg) AllowZero() bool {
-	return r.res && reflect.ValueOf(r.val).IsZero()
+func (r *Reg) Not() bool {
+	return !r.res
 }
-func (r *Reg) NotAllowZero() bool {
-	return r.res && !reflect.ValueOf(r.val).IsZero()
+func (r *Reg) AllowZero() *Reg {
+	r.res = r.res || reflect.ValueOf(r.val).IsZero()
+	return r
+}
+func (r *Reg) NotAllowZero() *Reg {
+	r.res = r.res && !reflect.ValueOf(r.val).IsZero()
+	return r
 }
 func (r *Reg) And(dest *Reg) *Reg {
 	r.res = r.res && dest.res

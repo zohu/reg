@@ -7,12 +7,12 @@ import (
 
 // StringReg
 func TestStringReg_IsEmpty(t *testing.T) {
-	if !String("").AllowEmpty() {
+	if !String("").AllowEmpty().B() {
 		t.Error("String(\"\").AllowEmpty() = false, want true")
 	}
 }
 func TestStringReg_NotEmpty(t *testing.T) {
-	if String("").NotAllowEmpty() {
+	if String("").NotAllowEmpty().B() {
 		t.Error("String(\"\").NotAllowEmpty() = true, want false")
 	}
 }
