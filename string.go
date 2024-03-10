@@ -23,11 +23,13 @@ func String(val string) *StringReg {
 		},
 	}
 }
-func (r *StringReg) AllowEmpty() bool {
-	return r.res && r.val == ""
+func (r *StringReg) AllowEmpty() *StringReg {
+	r.res = r.res || r.val == ""
+	return r
 }
-func (r *StringReg) NotAllowEmpty() bool {
-	return r.res && r.val != ""
+func (r *StringReg) NotAllowEmpty() *StringReg {
+	r.res = r.res && r.val != ""
+	return r
 }
 func (r *StringReg) IsAlphanumeric() *StringReg {
 	r.Match(PatternAlphanumeric)
