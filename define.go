@@ -3,7 +3,6 @@ package reg
 import (
 	"reflect"
 	"regexp"
-	"unicode/utf8"
 )
 
 type Reg struct {
@@ -21,7 +20,7 @@ func New(val interface{}) *Reg {
 func (r *Reg) B() bool {
 	return r.res
 }
-func (r *Reg) Not() bool {
+func (r *Reg) NotB() bool {
 	return !r.res
 }
 func (r *Reg) AllowZero() *Reg {
@@ -54,33 +53,5 @@ func (r *Reg) Match(pattern string) *Reg {
 func (r *Reg) NotMatch(pattern string) *Reg {
 	ok, _ := regexp.MatchString(pattern, r.String())
 	r.res = r.res && !ok
-	return r
-}
-func (r *Reg) MaxLen(length int) *Reg {
-	switch r.Kind() {
-	case reflect.String:
-		r.res = r.res && utf8.RuneCountInString(r.String()) <= length
-	case reflect.Slice, reflect.Array, reflect.Chan, reflect.Map:
-		r.res = r.res && reflect.ValueOf(r.val).Len() <= length
-	case reflect.Ptr:
-		r.val = reflect.ValueOf(r.val).Elem()
-		return r.MaxLen(length)
-	default:
-		r.res = false
-	}
-	return r
-}
-func (r *Reg) MinLen(length int) *Reg {
-	switch r.Kind() {
-	case reflect.String:
-		r.res = r.res && utf8.RuneCountInString(r.String()) >= length
-	case reflect.Slice, reflect.Array, reflect.Chan, reflect.Map:
-		r.res = r.res && reflect.ValueOf(r.val).Len() >= length
-	case reflect.Ptr:
-		r.val = reflect.ValueOf(r.val).Elem()
-		return r.MinLen(length)
-	default:
-		r.res = false
-	}
 	return r
 }

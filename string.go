@@ -1,5 +1,7 @@
 package reg
 
+import "unicode/utf8"
+
 const (
 	PatternAlphanumeric               = `^[a-zA-Z0-9]+$`
 	PatternAlphanumericUnderline      = `^[a-zA-Z0-9_]+$`
@@ -22,6 +24,14 @@ func String(val string) *StringReg {
 			res: true,
 		},
 	}
+}
+func (r *StringReg) MaxLen(length int) *StringReg {
+	r.res = r.res && utf8.RuneCountInString(r.String()) <= length
+	return r
+}
+func (r *StringReg) MinLen(length int) *StringReg {
+	r.res = r.res && utf8.RuneCountInString(r.String()) >= length
+	return r
 }
 func (r *StringReg) AllowEmpty() *StringReg {
 	r.res = r.res || r.val == ""
