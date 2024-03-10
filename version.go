@@ -8,9 +8,10 @@ import (
 )
 
 const (
-	PatternVersion        = `^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$`
-	PatternVersionSupport = `^(\^|~|>=|<=)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.?(0|[1-9]\d*)?$`
-	PatternVersionThan    = `^[vV]?(\*|0|[1-9]\d*)(\.(\*|0|[1-9]\d*))?(\.(\*|0|[1-9]\d*))?.*$`
+	PatternVersion         = `^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)$`
+	PatternVersionSupport  = `^(\^|~|>=|<=)?(0|[1-9]\d*)\.(0|[1-9]\d*)\.?(0|[1-9]\d*)?$`
+	PatternVersionThan     = `^[vV]?(\*|0|[1-9]\d*)(\.(\*|0|[1-9]\d*))?(\.(\*|0|[1-9]\d*))?.*$`
+	PatternVersionSemantic = `^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)(?:-((?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*)(?:\.(?:0|[1-9]\d*|\d*[a-zA-Z-][0-9a-zA-Z-]*))*))?(?:\+([0-9a-zA-Z-]+(?:\.[0-9a-zA-Z-]+)*))?$`
 )
 
 type VersionReg struct {
@@ -28,6 +29,14 @@ func (r *VersionReg) IsVersion() *VersionReg {
 }
 func (r *VersionReg) NotVersion() *VersionReg {
 	r.NotMatch(PatternVersion)
+	return r
+}
+func (r *VersionReg) IsSemanticVersion() *VersionReg {
+	r.Match(PatternVersionSemantic)
+	return r
+}
+func (r *VersionReg) NotSemanticVersion() *VersionReg {
+	r.NotMatch(PatternVersionSemantic)
 	return r
 }
 func (r *VersionReg) IsVersionSupport() *VersionReg {
